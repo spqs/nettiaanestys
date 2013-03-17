@@ -1,0 +1,436 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nuvavaalit.models &mdash; Nuorisovaltuustovaalit 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Nuorisovaltuustovaalit 1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Nuorisovaltuustovaalit 1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for nuvavaalit.models</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pyramid.security</span> <span class="kn">import</span> <span class="n">Allow</span>
+<span class="kn">from</span> <span class="nn">pyramid.security</span> <span class="kn">import</span> <span class="n">Authenticated</span>
+<span class="kn">from</span> <span class="nn">pyramid.security</span> <span class="kn">import</span> <span class="n">Everyone</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Column</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Float</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Integer</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">String</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Unicode</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">func</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">declarative_base</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">relationship</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">scoped_session</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">sessionmaker</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">synonym</span>
+<span class="kn">from</span> <span class="nn">z3c.bcrypt</span> <span class="kn">import</span> <span class="n">BcryptPasswordManager</span>
+<span class="kn">from</span> <span class="nn">zope.sqlalchemy</span> <span class="kn">import</span> <span class="n">ZopeTransactionExtension</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">DBSession</span> <span class="o">=</span> <span class="n">scoped_session</span><span class="p">(</span><span class="n">sessionmaker</span><span class="p">(</span><span class="n">extension</span><span class="o">=</span><span class="n">ZopeTransactionExtension</span><span class="p">()))</span>
+<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+<span class="n">password_manager</span> <span class="o">=</span> <span class="n">BcryptPasswordManager</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="Schedule"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.Schedule">[docs]</a><span class="k">class</span> <span class="nc">Schedule</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Election schedule.</span>
+
+<span class="sd">    From the point of view of the election there are three distinct time</span>
+<span class="sd">    periods: the time before the election, the time during the election and</span>
+<span class="sd">    the time after the election.</span>
+
+<span class="sd">    Voting is allowed only during the election, results will be available only</span>
+<span class="sd">    after the election and so on. This class provides an abstraction for the</span>
+<span class="sd">    application to determine which is the current time period.</span>
+
+<span class="sd">    The election period should be configured in the associated .ini</span>
+<span class="sd">    configuration using a ``nuvavaalit.election_period`` option within the</span>
+<span class="sd">    application configuration section. The option must consist of two (newline</span>
+<span class="sd">    separated) formatted timestamps which define the start and end of the</span>
+<span class="sd">    voting election. The format of the timestamps is ``%Y-%m-%d %H:%M``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor.</span>
+
+<span class="sd">        :param request: The currently active request:</span>
+<span class="sd">        :type request: `pyramid.request.Request`</span>
+
+<span class="sd">        :raises: `ValueError`, if the election period is not correctly defined.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s"> %H:%M&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="s">&#39;nuvavaalit.election_period&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]]</span>
+            <span class="k">if</span> <span class="n">start</span> <span class="o">&gt;=</span> <span class="n">end</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">end</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Invalid election period configuration (nuvavaalit.election_period)&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Schedule.before_elections"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.Schedule.before_elections">[docs]</a>    <span class="k">def</span> <span class="nf">before_elections</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks if we are currently in a time period before the elections.</span>
+
+<span class="sd">        :return: `True`, if the elections are in the future, `False` otherwise.</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Schedule.after_elections"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.Schedule.after_elections">[docs]</a>    <span class="k">def</span> <span class="nf">after_elections</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks if we are currently in a time period after the elections.</span>
+
+<span class="sd">        :return: `True`, if the elections are in the past, `False` otherwise.</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">&lt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Schedule.during_elections"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.Schedule.during_elections">[docs]</a>    <span class="k">def</span> <span class="nf">during_elections</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks if the elections are active currently.</span>
+
+<span class="sd">        :return: `True`, if the elections are in the future, `False` otherwise.</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">&lt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span>
+
+</div></div>
+<div class="viewcode-block" id="RootFactory"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.RootFactory">[docs]</a><span class="k">class</span> <span class="nc">RootFactory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Custom root factory.</span>
+
+<span class="sd">    An instance of this class will function as the context for all views. The</span>
+<span class="sd">    instance implements the access control policy which has the following</span>
+<span class="sd">    rules</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;matchdict&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">matchdict</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__acl__</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">schedule</span> <span class="o">=</span> <span class="n">Schedule</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">schedule</span><span class="o">.</span><span class="n">before_elections</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__acl__</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Allow</span><span class="p">,</span> <span class="n">Everyone</span><span class="p">,</span> <span class="s">&#39;browse&#39;</span><span class="p">))</span>
+
+        <span class="k">elif</span> <span class="n">schedule</span><span class="o">.</span><span class="n">during_elections</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__acl__</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Allow</span><span class="p">,</span> <span class="n">Everyone</span><span class="p">,</span> <span class="s">&#39;login&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__acl__</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Allow</span><span class="p">,</span> <span class="n">Authenticated</span><span class="p">,</span> <span class="s">&#39;vote&#39;</span><span class="p">))</span>
+
+        <span class="k">elif</span> <span class="n">schedule</span><span class="o">.</span><span class="n">after_elections</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__acl__</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Allow</span><span class="p">,</span> <span class="n">Everyone</span><span class="p">,</span> <span class="s">&#39;results&#39;</span><span class="p">))</span>
+
+</div>
+<div class="viewcode-block" id="Candidate"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.Candidate">[docs]</a><span class="k">class</span> <span class="nc">Candidate</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Election candidate.&quot;&quot;&quot;</span>
+
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;candidates&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;mysql_engine&#39;</span><span class="p">:</span> <span class="s">&#39;InnoDB&#39;</span><span class="p">,</span>
+        <span class="s">&#39;mysql_charset&#39;</span><span class="p">:</span> <span class="s">&#39;utf8&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="c">#: Candidate number for a special &quot;empty&quot; candidate. The empty candidate has a</span>
+    <span class="c">#: valid candidate number which can be voted but does not count in the</span>
+    <span class="c">#: results for any of the real candidates.</span>
+    <span class="n">EMPTY_CANDIDATE</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c">#: Primary key.</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c">#: Candidate number.</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c">#: First name of the candidate.</span>
+    <span class="n">firstname</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Unicode</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="c">#: Family name of the candidate.</span>
+    <span class="n">lastname</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Unicode</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="c">#: Slogan</span>
+    <span class="n">slogan</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Unicode</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="c">#: URL to personal page</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Unicode</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="c">#: List of associated :py:class:`Vote` records.</span>
+    <span class="n">votes</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s">&#39;Vote&#39;</span><span class="p">,</span> <span class="n">backref</span><span class="o">=</span><span class="s">&#39;candidate&#39;</span><span class="p">,</span> <span class="n">cascade</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number</span><span class="p">,</span> <span class="n">firstname</span><span class="p">,</span> <span class="n">lastname</span><span class="p">,</span> <span class="n">slogan</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param number: The candidate number.</span>
+<span class="sd">        :type number: int</span>
+
+<span class="sd">        :param firstname: The first name of the candidate.</span>
+<span class="sd">        :type firstname: unicode</span>
+
+<span class="sd">        :param lastname: The family name of the candidate.</span>
+<span class="sd">        :type lastname: unicode</span>
+
+<span class="sd">        :param slogan: Slogan for the candidate.</span>
+<span class="sd">        :type slogan: unicode</span>
+
+<span class="sd">        :param url: URL of an associated web site, such as a blog.</span>
+<span class="sd">        :type url: unicode</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="n">number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firstname</span> <span class="o">=</span> <span class="n">firstname</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastname</span> <span class="o">=</span> <span class="n">lastname</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slogan</span> <span class="o">=</span> <span class="n">slogan</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Candidate.is_empty"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.Candidate.is_empty">[docs]</a>    <span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns ``True`` if this candidate represents the special &quot;empty&quot;</span>
+<span class="sd">        candidate, ``False`` otherwise.</span>
+
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">number</span> <span class="o">==</span> <span class="n">Candidate</span><span class="o">.</span><span class="n">EMPTY_CANDIDATE</span>
+</div>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Detailed object representation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&#39;&lt;nuvavaalit.models.Candidate[name={0},number={1}] at {2}&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">number</span><span class="p">,</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Candidate.fullname"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.Candidate.fullname">[docs]</a>    <span class="k">def</span> <span class="nf">fullname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the full name of the candidate.</span>
+
+<span class="sd">        :rtype: unicode</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastname</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">firstname</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="k">return</span> <span class="s">u&#39;{0}, {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lastname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">firstname</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastname</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">firstname</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+</div></div>
+<div class="viewcode-block" id="Voter"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.Voter">[docs]</a><span class="k">class</span> <span class="nc">Voter</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Voter is an authenticated principal who is authorized to cast a vote.&quot;&quot;&quot;</span>
+
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;voters&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;mysql_engine&#39;</span><span class="p">:</span> <span class="s">&#39;InnoDB&#39;</span><span class="p">,</span>
+        <span class="s">&#39;mysql_charset&#39;</span><span class="p">:</span> <span class="s">&#39;utf8&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="c">#: Primary key.</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c">#: Username.</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Unicode</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="c">#: Encrypted password.</span>
+    <span class="n">_password</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="s">&#39;password&#39;</span><span class="p">,</span> <span class="n">String</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="c">#: First name(s).</span>
+    <span class="n">firstname</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Unicode</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="c">#: Last name.</span>
+    <span class="n">lastname</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Unicode</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="c">#: Opaque token to associate voters with additional datasets.</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Unicode</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">firstname</span><span class="p">,</span> <span class="n">lastname</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param username: Unique identifier for the user.</span>
+<span class="sd">        :type username: unicode</span>
+
+<span class="sd">        :param password: Password in plain-text. The password will be stored</span>
+<span class="sd">                         in ``bcrypt`` encrypted form and will not be</span>
+<span class="sd">                         available in plain-text form through this object.</span>
+<span class="sd">        :type password: unicode</span>
+
+<span class="sd">        :param firstname: First name(s)</span>
+<span class="sd">        :type firstname: unicode</span>
+
+<span class="sd">        :param lastname: Last name</span>
+<span class="sd">        :type lastname: unicode</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firstname</span> <span class="o">=</span> <span class="n">firstname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastname</span> <span class="o">=</span> <span class="n">lastname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="n">token</span>
+
+<div class="viewcode-block" id="Voter.fullname"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.Voter.fullname">[docs]</a>    <span class="k">def</span> <span class="nf">fullname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the full name of the voter.</span>
+
+<span class="sd">        :rtype: unicode</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">u&#39;{0} {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">firstname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastname</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Voter.has_voted"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.Voter.has_voted">[docs]</a>    <span class="k">def</span> <span class="nf">has_voted</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns ``True`` if the voter has already voted in the election,</span>
+<span class="sd">        ``False`` otherwise.</span>
+
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">DBSession</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">COUNT</span><span class="p">(</span><span class="n">VotingLog</span><span class="o">.</span><span class="n">id</span><span class="p">))</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">VotingLog</span><span class="o">.</span><span class="n">voter_id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">password</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_password</span>
+
+    <span class="nd">@password.setter</span>
+<div class="viewcode-block" id="Voter.password"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.Voter.password">[docs]</a>    <span class="k">def</span> <span class="nf">password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Stores the password in encrypted form.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_password</span> <span class="o">=</span> <span class="n">password_manager</span><span class="o">.</span><span class="n">encodePassword</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+
+    <span class="c">#: Encrypted password</span></div>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">synonym</span><span class="p">(</span><span class="s">&#39;_password&#39;</span><span class="p">,</span> <span class="n">descriptor</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Voter.check_password"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.Voter.check_password">[docs]</a>    <span class="k">def</span> <span class="nf">check_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns ``True`` if the given ``password`` matches to stored one,</span>
+<span class="sd">        ``False`` otherwise.</span>
+
+<span class="sd">        :param password: The plain-text password to check.</span>
+<span class="sd">        :type password: str</span>
+
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">password_manager</span><span class="o">.</span><span class="n">checkPassword</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Vote"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.Vote">[docs]</a><span class="k">class</span> <span class="nc">Vote</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Election vote.&quot;&quot;&quot;</span>
+
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;votes&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;mysql_engine&#39;</span><span class="p">:</span> <span class="s">&#39;InnoDB&#39;</span><span class="p">,</span>
+        <span class="s">&#39;mysql_charset&#39;</span><span class="p">:</span> <span class="s">&#39;utf8&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="c">#: Primary key.</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c">#: Foreign key reference to an associated :py:class:`Candidate` object.</span>
+    <span class="n">candidate_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s">&#39;candidates.id&#39;</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidate_or_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param candidate_or_id: The :py:class:`Candidate` receiving the vote</span>
+<span class="sd">        :type candidate_or_id: :py:class:`Candidate` or primary key</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">candidate_id</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">candidate_or_id</span><span class="p">,</span> <span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">candidate_or_id</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="VotingLog"><a class="viewcode-back" href="../../api.html#nuvavaalit.models.VotingLog">[docs]</a><span class="k">class</span> <span class="nc">VotingLog</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Record of a voter who has voted in the election.</span>
+
+<span class="sd">    The primary use case is to keep track of voters who have already voted to</span>
+<span class="sd">    prevent them from casting additional votes. The :py:attr:`voter_id`</span>
+<span class="sd">    foreign key has a *UNIQUE* constraint which enforces the single vote per</span>
+<span class="sd">    voter restriction on the database level.</span>
+
+<span class="sd">    .. note:: The voting log specifically does not reference the</span>
+<span class="sd">        actual :py:class:`Vote` which was cast.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;votinglog&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;mysql_engine&#39;</span><span class="p">:</span> <span class="s">&#39;InnoDB&#39;</span><span class="p">,</span>
+        <span class="s">&#39;mysql_charset&#39;</span><span class="p">:</span> <span class="s">&#39;utf8&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="c">#: Primary key.</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c">#: Timestamp when the vote was cast.</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Float</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="c">#: Foreign key to the :py:class:`Voter` instance who cast the vote.</span>
+    <span class="n">voter_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s">&#39;voters.id&#39;</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c">#: Reference to the associated :py:class:`Voter` instance.</span>
+    <span class="n">voter</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s">&#39;Voter&#39;</span><span class="p">,</span> <span class="n">uselist</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voter_or_id</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param voter_or_id: The :py:class:`Voter` who cast the vote</span>
+<span class="sd">        :type voter_or_id: :py:class:`Voter` instance or primary key</span>
+
+<span class="sd">        :param timestamp: The timestamp. If ``None``, defaults to ``time.time()``.</span>
+<span class="sd">        :type timestamp: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voter_id</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">voter_or_id</span><span class="p">,</span> <span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">voter_or_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="n">timestamp</span> <span class="k">if</span> <span class="n">timestamp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+</div>
+<span class="k">def</span> <span class="nf">initialize_sql</span><span class="p">(</span><span class="n">engine</span><span class="p">):</span>
+    <span class="n">DBSession</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">bind</span> <span class="o">=</span> <span class="n">engine</span>
+    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Nuorisovaltuustovaalit 1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Suomen Verkkodemokratiaseura ry.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

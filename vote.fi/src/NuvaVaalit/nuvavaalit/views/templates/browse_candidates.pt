@@ -1,0 +1,35 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      metal:use-macro="main.macros['master']">
+  <head></head>
+  <body>
+    <metal:header fill-slot="header">
+        <div class="row">
+            <div class="cell position-0 width-6">
+              <div id="browse-candidates">
+                <h1><a href="${request.application_url}">${site_title}</a></h1>
+              </div>
+            </div>
+              <div class="cell width-3 position-6">
+                <div id="search-wrapper"></div>
+              </div>
+          </div>
+    </metal:header>
+
+    <div metal:fill-slot="main">
+
+    <div class="row" tal:repeat="row candidates">
+      <div class="cell width-1:${columns} position-${positions.next()}"
+           tal:repeat="candidate row">
+        <div class="candidate"
+             tal:condition="candidate">
+            <img alt="${candidate.number}" src="${candidate.image_url}" width="100" height="100" />
+            <h3>${candidate.name}, ${candidate.number}</h3>
+            <em>“${candidate.slogan}”</em>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,84 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      metal:use-macro="main.macros['master']">
+  <head></head>
+  <body>
+    <metal:header fill-slot="header">
+      <div id="frontpage">
+      </div>
+    </metal:header>
+
+    <div metal:fill-slot="main" i18n:domain="nuvavaalit">
+        <div class="row">
+            <div class="cell width-2 position-0 banner-left">
+                <a class="banner" href="http://www.verkkodemokratiaseura.fi/">
+                    <img src="http://lorempixel.com/g/150/60/abstract" />
+                </a>
+                <a class="banner" href="http://www.verkkodemokratiaseura.fi/">
+                    <img src="http://lorempixel.com/g/150/70/abstract" />
+                </a>
+                <a class="banner" href="http://www.verkkodemokratiaseura.fi/">
+                    <img src="http://lorempixel.com/g/150/80/abstract" />
+                </a>
+                <a class="banner" href="http://www.verkkodemokratiaseura.fi/">
+                    <img src="http://lorempixel.com/g/150/90/abstract" />
+                </a>
+            </div>
+            <div class="cell width-5 position-2">
+
+                <h1><a href="${request.application_url}">${site_title}</a></h1>
+
+            <tal:lang condition="request._LOCALE_ == 'fi'">
+                <p><strong>Äänestä Lorem Ipsum nettivaaleissa!</strong></p>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Pellentesque eros nulla, pellentesque sed dictum porta, commodo
+                a justo. Suspendisse potenti. Aliquam nec metus nec tellus
+                cursus sollicitudin. Maecenas non lacus vitae ipsum feugiat
+                congue vitae sit amet lectus.</p>
+
+                <p>Aenean non enim vitae sapien gravida pulvinar at at est.
+                Praesent mauris enim, vehicula quis pellentesque eget, congue
+                rutrum enim. Morbi rutrum lorem libero. Etiam congue blandit sem
+                quis cursus. Lorem ipsum dolor sit amet, consectetur adipiscing
+                elit.</p>
+
+            </tal:lang>
+            <tal:lang condition="request._LOCALE_ == 'sv'">
+                <p><strong>Rösta i Lorem Ipsum nätvalet!</strong></p>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Pellentesque eros nulla, pellentesque sed dictum porta, commodo
+                a justo. Suspendisse potenti. Aliquam nec metus nec tellus
+                cursus sollicitudin. Maecenas non lacus vitae ipsum feugiat
+                congue vitae sit amet lectus.</p>
+
+                <p>Aenean non enim vitae sapien gravida pulvinar at at est.
+                Praesent mauris enim, vehicula quis pellentesque eget, congue
+                rutrum enim. Morbi rutrum lorem libero. Etiam congue blandit sem
+                quis cursus. Lorem ipsum dolor sit amet, consectetur adipiscing
+                elit.</p>
+
+            </tal:lang>
+                <p class="browse-candidates">
+                    <a href="${browse_url}" i18n:translate="">Tutustu ehdokkaisiin</a>
+                </p>
+            </div>
+            <div class="cell width-2 position-7 banner-right">
+                <a class="banner" href="http://www.verkkodemokratiaseura.fi/">
+                    <img src="http://lorempixel.com/g/150/60/abstract" />
+                </a>
+                <a class="banner" href="http://www.verkkodemokratiaseura.fi/">
+                    <img src="http://lorempixel.com/g/150/70/abstract" />
+                </a>
+                <a class="banner" href="http://www.verkkodemokratiaseura.fi/">
+                    <img src="http://lorempixel.com/g/150/80/abstract" />
+                </a>
+                <a class="banner" href="http://www.verkkodemokratiaseura.fi/">
+                    <img src="http://lorempixel.com/g/150/90/abstract" />
+                </a>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>

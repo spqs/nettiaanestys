@@ -1,0 +1,181 @@
+# Swedish translations for NuvaVaalit.
+# Copyright (C) 2012 ORGANIZATION
+# This file is distributed under the same license as the NuvaVaalit project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NuvaVaalit 1.0b1\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2013-03-05 20:57+0200\n"
+"PO-Revision-Date: 2012-10-03 09:13+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: sv <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: nuvavaalit/events.py:64
+msgid "Lorem ipsum nettivaalit"
+msgstr ""
+
+#: nuvavaalit/views/js.py:10
+msgid "Haku"
+msgstr "Sök"
+
+#: nuvavaalit/views/js.py:11
+msgid "Hae nimellä tai numerolla"
+msgstr "Sök på namn eller nummer"
+
+#: nuvavaalit/views/js.py:12
+msgid "Ei tuloksia haulle:"
+msgstr "Inga resultat hittades för"
+
+#: nuvavaalit/views/js.py:13
+msgid "Poistu äänestyksestä"
+msgstr "Lämna röstningsssidan"
+
+#: nuvavaalit/views/voting.py:160
+msgid "Tyhjä"
+msgstr "Blankt"
+
+#: nuvavaalit/views/voting.py:168
+msgid "Et ole vielä äänestänyt. Oletko varma, että haluat poistua sivulta?"
+msgstr "Du har ännu inte röstat. Är du säker att du vill lämna sidan?"
+
+#: nuvavaalit/views/templates/home.pt:64
+msgid "Tutustu ehdokkaisiin"
+msgstr "Bekanta dig med kandidaterna"
+
+#: nuvavaalit/views/templates/login.pt:9 nuvavaalit/views/templates/login.pt:33
+msgid "Tunnistaudu"
+msgstr "Identifiera"
+
+#: nuvavaalit/views/templates/login.pt:22
+msgid "Käyttäjätunnus"
+msgstr "Användar-ID"
+
+#: nuvavaalit/views/templates/login.pt:26
+msgid "Salasana"
+msgstr "Lösenord"
+
+#: nuvavaalit/views/templates/notfound.pt:9
+msgid "Sivua ei löytynyt"
+msgstr "Sidan du sökte hittades inte"
+
+#: nuvavaalit/views/templates/notfound.pt:17
+msgid "etusivulta"
+msgstr "förstasidan"
+
+#: nuvavaalit/views/templates/notfound.pt:16
+msgid ""
+"Hakemaasi sivua ei löytynyt. Tarkista sivun osoite tai aloita "
+"äänestäminen uudelleen ${etusivulta}."
+msgstr ""
+"Sidan du sökte hittades inte. Kontrollera sidans adress eller börja rösta"
+" på nytt på ${etusivulta}."
+
+#: nuvavaalit/views/templates/results.pt:16
+msgid "Äänestysprosentti ${prosentti} %, ääniä annettu yhteensä ${aanimaara}."
+msgstr "Valdeltagande ${prosentti} %, antal röster sammanlagt ${aanimaara}."
+
+#: nuvavaalit/views/templates/results.pt:22
+msgid "Valitut ehdokkaat"
+msgstr "Valda kandidater"
+
+#: nuvavaalit/views/templates/results.pt:26
+msgid "Ehdokas"
+msgstr "Kandidat"
+
+#: nuvavaalit/views/templates/results.pt:27
+msgid "Äänet"
+msgstr "Röster"
+
+#: nuvavaalit/views/templates/results.pt:28
+msgid "Prosentti"
+msgstr "Procent"
+
+#: nuvavaalit/views/templates/select.pt:8
+msgid "Valitse"
+msgstr "Välj"
+
+#: nuvavaalit/views/templates/select.pt:19
+msgid "Valitse ehdokkaasi klikkaamalla nimeä."
+msgstr "Välj din kandidat genom att klicka på namnet."
+
+#: nuvavaalit/views/templates/select.pt:22
+msgid "Äänestä tyhjää"
+msgstr "Rösta blankt"
+
+#: nuvavaalit/views/templates/select.pt:22
+msgid "tyhjää"
+msgstr "blankt"
+
+#: nuvavaalit/views/templates/select.pt:20
+msgid "Halutessasi voit äänestää myös ${tyhjaa}."
+msgstr "Om du vill kan du också rösta ${tyhjaa}."
+
+#: nuvavaalit/views/templates/thanks.pt:9
+msgid "Sulje ikkuna"
+msgstr "Stäng fönstret"
+
+#: nuvavaalit/views/templates/thanks.pt:19
+msgid "Kiitos äänestämisestä!"
+msgstr "Tack för din röst!"
+
+#: nuvavaalit/views/templates/thanks.pt:20
+msgid "Äänesi on tallennettu ja sinut on kirjattu ulos äänestysjärjestelmästä."
+msgstr "Din röst har sparats. Du är inte längre inloggad på röstningssidan."
+
+#: nuvavaalit/views/templates/vote.pt:9 nuvavaalit/views/templates/vote.pt:41
+#: nuvavaalit/views/templates/vote.pt:63
+msgid "Äänestä"
+msgstr "Rösta"
+
+#: nuvavaalit/views/templates/vote.pt:25
+msgid "Äänestäjä:"
+msgstr "Väljare:"
+
+#: nuvavaalit/views/templates/vote.pt:33
+msgid "Olet valinnut ehdokkaan"
+msgstr "Du har valt kandidat"
+
+#: nuvavaalit/views/templates/vote.pt:39
+msgid "kirjoittamalla ehdokkaan numero"
+msgstr "skriva kandidatens nummer"
+
+#: nuvavaalit/views/templates/vote.pt:37
+msgid ""
+"Äänestä valitsemaasi ehdokasta ${kirjottamalla_ehdokkaan_numero} "
+"äänestyslippuun ja painamalla ${aanesta}-painiketta."
+msgstr ""
+"Rösta på kandidaten du valt genom att ${kirjottamalla_ehdokkaan_numero} "
+"på valsedeln och trycka på knappen ${aanesta}."
+
+#: nuvavaalit/views/templates/vote.pt:45 nuvavaalit/views/templates/vote.pt:57
+msgid "Vaihda ehdokasta"
+msgstr "Byta kandidaten du valt"
+
+#: nuvavaalit/views/templates/vote.pt:45
+msgid "vaihtaa valitsemaasi ehdokasta"
+msgstr "byta kandidaten du valt"
+
+#: nuvavaalit/views/templates/vote.pt:43
+msgid "Voit halutessasi ${vaihtaa}."
+msgstr "Om du vill kan du ${vaihtaa}."
+
+#: nuvavaalit/views/templates/vote.pt:57
+msgid "valitse toinen ehdokas"
+msgstr "välj en annan kandidat"
+
+#: nuvavaalit/views/templates/vote.pt:53
+msgid ""
+"Antamasi ehdokasnumero ei vastaa valintaasi. Tarkista numero ja yritä "
+"uudelleen tai ${valitse_toinen_ehdokas}."
+msgstr ""
+"Kandidatnumret du angett motsvarar inte ditt val. Kontrollera numret och "
+"försök på nytt eller ${valitse_toinen_ehdokas}."
+
+

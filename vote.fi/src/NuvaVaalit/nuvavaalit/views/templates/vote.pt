@@ -1,0 +1,105 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="main.macros['master']">
+  <head></head>
+  <body>
+    <metal:header fill-slot="header">
+      <div id="vote-candidate" class="progress" i18n:domain="nuvavaalit">
+        <h1 class="visuallyhidden" i18n:translate="">Äänestä</h1>
+      </div>
+    </metal:header>
+
+    <div metal:fill-slot="main" i18n:domain="nuvavaalit">
+
+    <h1><a href="${request.application_url}">${site_title}</a></h1>
+
+
+      <div class="row">
+        <div class="cell width-1:2 position-0">
+          <div id="voting-info">
+
+            <table id="voter">
+              <tbody>
+                <tr>
+                  <th i18n:translate="">Äänestäjä:</th>
+                  <td>${voter.fullname}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="selected-candidate">
+
+              <p i18n:translate="">Olet valinnut ehdokkaan</p>
+
+              <p class="candidate-name">${candidate.number} ${candidate.name}</p>
+
+              <p i18n:translate="">
+                Äänestä valitsemaasi ehdokasta
+                <span class="vote-hilight" i18n:name="kirjottamalla_ehdokkaan_numero"
+                      i18n:translate="">kirjoittamalla ehdokkaan numero</span>
+              äänestyslippuun ja painamalla <strong i18n:name="aanesta" i18n:translate="">Äänestä</strong>-painiketta.</p>
+
+              <p i18n:translate="">
+                Voit halutessasi
+                <a href="${select_url}" title="Vaihda ehdokasta" i18n:name="vaihtaa" i18n:translate="" i18n:attributes="title">vaihtaa
+              valitsemaasi ehdokasta</a>.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <div id="voting-form-container" class="cell width-1:2 position-1:2">
+          <div class="error"
+               tal:condition="error" i18n:translate="">
+            Antamasi ehdokasnumero ei vastaa valintaasi.
+            Tarkista numero ja yritä uudelleen tai
+              <a href="${select_url}" title="Vaihda ehdokasta" i18n:translate=""
+                 i18n:name="valitse_toinen_ehdokas" i18n:attributes="title">valitse toinen ehdokas</a>.</div>
+          <div id="voting-form">
+            <form method="post" action="${action_url}" autocomplete="off">
+              <label>N:o <input id="candidate-number" name="vote" type="text" autofocus="autofocus" tabindex="1" /></label>
+              <input type="hidden" name="csrf_token" value="${csrf_token}" />
+              <input id="submit-vote" type="submit" value="Äänestä" tabindex="2" i18n:attributes="value"/>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div metal:fill-slot="javascript_bottom">
+      <script>
+        $(function () {
+
+            if (!Modernizr.input.autofocus) {
+                $('input[autofocus=autofocus]').focus();
+            }
+
+            var confirmUnload = true;
+
+            $('a').click(function () {
+               confirmUnload = false;
+            });
+            $('form').submit(function () {
+               confirmUnload = false;
+            });
+
+            // Confirm the page unload if the user didn't follow a link or submit a form.
+            window.onbeforeunload = function () {
+                if (confirmUnload) {
+                    var e = e || window.event,
+                        msg = '${unload_confirmation}';
+                    if (e) {
+                        e.returnValue = msg;
+                    }
+                    return msg;
+                }
+            };
+
+        });
+      </script>
+    </div>
+
+  </body>
+</html>

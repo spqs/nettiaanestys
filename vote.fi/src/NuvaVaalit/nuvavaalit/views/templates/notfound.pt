@@ -1,0 +1,21 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="main.macros['master']">
+  <head></head>
+  <body>
+    <metal:header fill-slot="header">
+      <div id="failed-login"  class="progress" i18n:domain="nuvavaalit">
+        <h1 class="visuallyhidden" i18n:translate="">Sivua ei löytynyt</h1>
+      </div>
+    </metal:header>
+
+    <div id="notfound"
+         metal:fill-slot="main" i18n:domain="nuvavaalit">
+
+      <h2 i18n:translate="">Hakemaasi sivua ei löytynyt. Tarkista sivun osoite tai aloita äänestäminen uudelleen
+      <a href="${request.application_url}" i18n:name="etusivulta" i18n:translate="">etusivulta</a>.</h2>
+
+    </div>
+  </body>
+</html>

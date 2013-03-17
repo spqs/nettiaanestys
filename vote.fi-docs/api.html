@@ -1,0 +1,738 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API documentation &mdash; Nuorisovaltuustovaalit 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Nuorisovaltuustovaalit 1.0 documentation" href="index.html" />
+    <link rel="prev" title="Security" href="security.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="security.html" title="Security"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Nuorisovaltuustovaalit 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="api-documentation">
+<h1>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-nuvavaalit.models">
+<span id="database-models"></span><h2>Database models<a class="headerlink" href="#module-nuvavaalit.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nuvavaalit.models.Schedule">
+<em class="property">class </em><tt class="descclassname">nuvavaalit.models.</tt><tt class="descname">Schedule</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/models.html#Schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.Schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Election schedule.</p>
+<p>From the point of view of the election there are three distinct time
+periods: the time before the election, the time during the election and
+the time after the election.</p>
+<p>Voting is allowed only during the election, results will be available only
+after the election and so on. This class provides an abstraction for the
+application to determine which is the current time period.</p>
+<p>The election period should be configured in the associated .ini
+configuration using a <tt class="docutils literal"><span class="pre">nuvavaalit.election_period</span></tt> option within the
+application configuration section. The option must consist of two (newline
+separated) formatted timestamps which define the start and end of the
+voting election. The format of the timestamps is <tt class="docutils literal"><span class="pre">%Y-%m-%d</span> <span class="pre">%H:%M</span></tt></p>
+<dl class="method">
+<dt id="nuvavaalit.models.Schedule.after_elections">
+<tt class="descname">after_elections</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nuvavaalit/models.html#Schedule.after_elections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.Schedule.after_elections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if we are currently in a time period after the elections.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite>, if the elections are in the past, <cite>False</cite> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nuvavaalit.models.Schedule.before_elections">
+<tt class="descname">before_elections</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nuvavaalit/models.html#Schedule.before_elections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.Schedule.before_elections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if we are currently in a time period before the elections.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite>, if the elections are in the future, <cite>False</cite> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nuvavaalit.models.Schedule.during_elections">
+<tt class="descname">during_elections</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nuvavaalit/models.html#Schedule.during_elections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.Schedule.during_elections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the elections are active currently.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite>, if the elections are in the future, <cite>False</cite> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nuvavaalit.models.RootFactory">
+<em class="property">class </em><tt class="descclassname">nuvavaalit.models.</tt><tt class="descname">RootFactory</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/models.html#RootFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.RootFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Custom root factory.</p>
+<p>An instance of this class will function as the context for all views. The
+instance implements the access control policy which has the following
+rules</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nuvavaalit.models.Candidate">
+<em class="property">class </em><tt class="descclassname">nuvavaalit.models.</tt><tt class="descname">Candidate</tt><big>(</big><em>number</em>, <em>firstname</em>, <em>lastname</em>, <em>slogan</em>, <em>url</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/models.html#Candidate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.Candidate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Election candidate.</p>
+<dl class="attribute">
+<dt id="nuvavaalit.models.Candidate.EMPTY_CANDIDATE">
+<tt class="descname">EMPTY_CANDIDATE</tt><em class="property"> = 0</em><a class="headerlink" href="#nuvavaalit.models.Candidate.EMPTY_CANDIDATE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Candidate number for a special &#8220;empty&#8221; candidate. The empty candidate has a
+valid candidate number which can be voted but does not count in the
+results for any of the real candidates.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Candidate.firstname">
+<tt class="descname">firstname</tt><a class="headerlink" href="#nuvavaalit.models.Candidate.firstname" title="Permalink to this definition">¶</a></dt>
+<dd><p>First name of the candidate.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nuvavaalit.models.Candidate.fullname">
+<tt class="descname">fullname</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nuvavaalit/models.html#Candidate.fullname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.Candidate.fullname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the full name of the candidate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">unicode</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Candidate.id">
+<tt class="descname">id</tt><a class="headerlink" href="#nuvavaalit.models.Candidate.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Primary key.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nuvavaalit.models.Candidate.is_empty">
+<tt class="descname">is_empty</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nuvavaalit/models.html#Candidate.is_empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.Candidate.is_empty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <tt class="docutils literal"><span class="pre">True</span></tt> if this candidate represents the special &#8220;empty&#8221;
+candidate, <tt class="docutils literal"><span class="pre">False</span></tt> otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Candidate.lastname">
+<tt class="descname">lastname</tt><a class="headerlink" href="#nuvavaalit.models.Candidate.lastname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Family name of the candidate.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Candidate.number">
+<tt class="descname">number</tt><a class="headerlink" href="#nuvavaalit.models.Candidate.number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Candidate number.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Candidate.slogan">
+<tt class="descname">slogan</tt><a class="headerlink" href="#nuvavaalit.models.Candidate.slogan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slogan</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Candidate.url">
+<tt class="descname">url</tt><a class="headerlink" href="#nuvavaalit.models.Candidate.url" title="Permalink to this definition">¶</a></dt>
+<dd><p>URL to personal page</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Candidate.votes">
+<tt class="descname">votes</tt><a class="headerlink" href="#nuvavaalit.models.Candidate.votes" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of associated <a class="reference internal" href="#nuvavaalit.models.Vote" title="nuvavaalit.models.Vote"><tt class="xref py py-class docutils literal"><span class="pre">Vote</span></tt></a> records.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nuvavaalit.models.Voter">
+<em class="property">class </em><tt class="descclassname">nuvavaalit.models.</tt><tt class="descname">Voter</tt><big>(</big><em>username</em>, <em>password</em>, <em>firstname</em>, <em>lastname</em>, <em>token=None</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/models.html#Voter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.Voter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Voter is an authenticated principal who is authorized to cast a vote.</p>
+<dl class="method">
+<dt id="nuvavaalit.models.Voter.check_password">
+<tt class="descname">check_password</tt><big>(</big><em>password</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/models.html#Voter.check_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.Voter.check_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <tt class="docutils literal"><span class="pre">True</span></tt> if the given <tt class="docutils literal"><span class="pre">password</span></tt> matches to stored one,
+<tt class="docutils literal"><span class="pre">False</span></tt> otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>password</strong> (<em>str</em>) &#8211; The plain-text password to check.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Voter.firstname">
+<tt class="descname">firstname</tt><a class="headerlink" href="#nuvavaalit.models.Voter.firstname" title="Permalink to this definition">¶</a></dt>
+<dd><p>First name(s).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nuvavaalit.models.Voter.fullname">
+<tt class="descname">fullname</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nuvavaalit/models.html#Voter.fullname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.Voter.fullname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the full name of the voter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">unicode</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nuvavaalit.models.Voter.has_voted">
+<tt class="descname">has_voted</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nuvavaalit/models.html#Voter.has_voted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.Voter.has_voted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <tt class="docutils literal"><span class="pre">True</span></tt> if the voter has already voted in the election,
+<tt class="docutils literal"><span class="pre">False</span></tt> otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Voter.id">
+<tt class="descname">id</tt><a class="headerlink" href="#nuvavaalit.models.Voter.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Primary key.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Voter.lastname">
+<tt class="descname">lastname</tt><a class="headerlink" href="#nuvavaalit.models.Voter.lastname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Last name.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Voter.password">
+<tt class="descname">password</tt><a class="reference internal" href="_modules/nuvavaalit/models.html#Voter.password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.Voter.password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encrypted password</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Voter.token">
+<tt class="descname">token</tt><a class="headerlink" href="#nuvavaalit.models.Voter.token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opaque token to associate voters with additional datasets.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Voter.username">
+<tt class="descname">username</tt><a class="headerlink" href="#nuvavaalit.models.Voter.username" title="Permalink to this definition">¶</a></dt>
+<dd><p>Username.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nuvavaalit.models.Vote">
+<em class="property">class </em><tt class="descclassname">nuvavaalit.models.</tt><tt class="descname">Vote</tt><big>(</big><em>candidate_or_id</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/models.html#Vote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.Vote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Election vote.</p>
+<dl class="attribute">
+<dt id="nuvavaalit.models.Vote.candidate">
+<tt class="descname">candidate</tt><a class="headerlink" href="#nuvavaalit.models.Vote.candidate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reference to an associated <a class="reference internal" href="#nuvavaalit.models.Candidate" title="nuvavaalit.models.Candidate"><tt class="xref py py-class docutils literal"><span class="pre">Candidate</span></tt></a> object or <tt class="docutils literal"><span class="pre">None</span></tt>. This
+is created as a backreference in the <a class="reference internal" href="#nuvavaalit.models.Candidate.votes" title="nuvavaalit.models.Candidate.votes"><tt class="xref py py-attr docutils literal"><span class="pre">Candidate.votes</span></tt></a>
+relationship.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Vote.candidate_id">
+<tt class="descname">candidate_id</tt><a class="headerlink" href="#nuvavaalit.models.Vote.candidate_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Foreign key reference to an associated <a class="reference internal" href="#nuvavaalit.models.Candidate" title="nuvavaalit.models.Candidate"><tt class="xref py py-class docutils literal"><span class="pre">Candidate</span></tt></a> object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.Vote.id">
+<tt class="descname">id</tt><a class="headerlink" href="#nuvavaalit.models.Vote.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Primary key.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nuvavaalit.models.VotingLog">
+<em class="property">class </em><tt class="descclassname">nuvavaalit.models.</tt><tt class="descname">VotingLog</tt><big>(</big><em>voter_or_id</em>, <em>timestamp=None</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/models.html#VotingLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.models.VotingLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Record of a voter who has voted in the election.</p>
+<p>The primary use case is to keep track of voters who have already voted to
+prevent them from casting additional votes. The <a class="reference internal" href="#nuvavaalit.models.VotingLog.voter_id" title="nuvavaalit.models.VotingLog.voter_id"><tt class="xref py py-attr docutils literal"><span class="pre">voter_id</span></tt></a>
+foreign key has a <em>UNIQUE</em> constraint which enforces the single vote per
+voter restriction on the database level.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The voting log specifically does not reference the
+actual <a class="reference internal" href="#nuvavaalit.models.Vote" title="nuvavaalit.models.Vote"><tt class="xref py py-class docutils literal"><span class="pre">Vote</span></tt></a> which was cast.</p>
+</div>
+<dl class="attribute">
+<dt id="nuvavaalit.models.VotingLog.id">
+<tt class="descname">id</tt><a class="headerlink" href="#nuvavaalit.models.VotingLog.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Primary key.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.VotingLog.timestamp">
+<tt class="descname">timestamp</tt><a class="headerlink" href="#nuvavaalit.models.VotingLog.timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timestamp when the vote was cast.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.VotingLog.voter">
+<tt class="descname">voter</tt><a class="headerlink" href="#nuvavaalit.models.VotingLog.voter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reference to the associated <a class="reference internal" href="#nuvavaalit.models.Voter" title="nuvavaalit.models.Voter"><tt class="xref py py-class docutils literal"><span class="pre">Voter</span></tt></a> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nuvavaalit.models.VotingLog.voter_id">
+<tt class="descname">voter_id</tt><a class="headerlink" href="#nuvavaalit.models.VotingLog.voter_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Foreign key to the <a class="reference internal" href="#nuvavaalit.models.Voter" title="nuvavaalit.models.Voter"><tt class="xref py py-class docutils literal"><span class="pre">Voter</span></tt></a> instance who cast the vote.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nuvavaalit.events">
+<span id="event-subscribers"></span><h2>Event subscribers<a class="headerlink" href="#module-nuvavaalit.events" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nuvavaalit.events.renderer_globals">
+<tt class="descclassname">nuvavaalit.events.</tt><tt class="descname">renderer_globals</tt><big>(</big><em>event</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/events.html#renderer_globals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.events.renderer_globals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary of mappings that are available as global
+parameters in each renderer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nuvavaalit.events.new_request">
+<tt class="descclassname">nuvavaalit.events.</tt><tt class="descname">new_request</tt><big>(</big><em>event</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/events.html#new_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.events.new_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Explicitly set the wsgi.url_scheme attribute when a new request is created.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nuvavaalit.crypto">
+<span id="cryptographic-utilities"></span><h2>Cryptographic utilities<a class="headerlink" href="#module-nuvavaalit.crypto" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nuvavaalit.crypto.encrypt">
+<tt class="descclassname">nuvavaalit.crypto.</tt><tt class="descname">encrypt</tt><big>(</big><em>data</em>, <em>key</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/crypto.html#encrypt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.crypto.encrypt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encrypts the given data using AES in cipher feedback mode (CFB) with
+the given password.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> (<em>str</em>) &#8211; Encryption password.</li>
+<li><strong>data</strong> (<em>str</em>) &#8211; Data to encrypt.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A hexadecimal string representation of the encrypted data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nuvavaalit.crypto.decrypt">
+<tt class="descclassname">nuvavaalit.crypto.</tt><tt class="descname">decrypt</tt><big>(</big><em>data</em>, <em>key</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/crypto.html#decrypt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.crypto.decrypt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decrypts the given data.</p>
+<p>The data must have been encrypted using AES in cipher feeback (CFB) mode
+and serialized in a hexadecimal string representation.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There is no way for this function to detect whether the given
+key is correct or not. Using an invalid key will
+result in the data to decrypt as nonsense. It is up to the
+caller to determine whether decryption was successful or not.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>str</em>) &#8211; The encrypted data in hexadecimal string form.</li>
+<li><strong>key</strong> (<em>str</em>) &#8211; The decryption password.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nuvavaalit.crypto.session_key">
+<tt class="descclassname">nuvavaalit.crypto.</tt><tt class="descname">session_key</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nuvavaalit/crypto.html#session_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.crypto.session_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a random key that can be used as an encryption key during a
+user session.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nuvavaalit.crypto.generate_iv">
+<tt class="descclassname">nuvavaalit.crypto.</tt><tt class="descname">generate_iv</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nuvavaalit/crypto.html#generate_iv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.crypto.generate_iv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a random IV (initial vector) value.</p>
+<p>The IV consists of 16 random bytes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nuvavaalit.views.login">
+<span id="public-views"></span><h2>Public views<a class="headerlink" href="#module-nuvavaalit.views.login" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nuvavaalit.views.login.login">
+<tt class="descclassname">nuvavaalit.views.login.</tt><tt class="descname">login</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/views/login.html#login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.views.login.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders a login form and logs in a user if given the correct
+credentials.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> (<tt class="xref py py-class docutils literal"><span class="pre">pyramid.request.Request</span></tt>) &#8211; The currently active request.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="module-nuvavaalit.views.public"></span><dl class="function">
+<dt id="nuvavaalit.views.public.home">
+<tt class="descclassname">nuvavaalit.views.public.</tt><tt class="descname">home</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/views/public.html#home"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.views.public.home" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry page.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nuvavaalit.views.public.browse_candidates">
+<tt class="descclassname">nuvavaalit.views.public.</tt><tt class="descname">browse_candidates</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/views/public.html#browse_candidates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.views.public.browse_candidates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders a listing of candidates prior to the election.</p>
+<p>This is a read-only page which does not allow voting. The main purpose is
+to allow voters to familiarize themselves with the candidates prior to the
+election.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> (<tt class="xref py py-class docutils literal"><span class="pre">pyramid.request.Request</span></tt>) &#8211; The currently active request.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nuvavaalit.views.voting">
+<span id="voting-views"></span><h2>Voting views<a class="headerlink" href="#module-nuvavaalit.views.voting" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nuvavaalit.views.voting.select">
+<tt class="descclassname">nuvavaalit.views.voting.</tt><tt class="descname">select</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/views/voting.html#select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.views.voting.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the candidate selection list.</p>
+<p>The link to the voting page for each candidate contains an identifier
+which is the result of encrypting the candidate number with a random
+session key. The main benefit from this is that the chosen candidate can
+not be identified from the used URL. This allows us to use GET requests
+instead of POST requests without having to worry about leaking information
+in server logs and browser history.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> (<tt class="xref py py-class docutils literal"><span class="pre">pyramid.request.Request</span></tt>) &#8211; The currently active request.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nuvavaalit.views.voting.vote">
+<tt class="descclassname">nuvavaalit.views.voting.</tt><tt class="descname">vote</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/views/voting.html#vote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.views.voting.vote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the voting form for the selected candidate and processes the
+vote.</p>
+<p>A valid vote must meet all of the following criteria:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The voter must be authenticated.</li>
+<li>The voter must not have voted previously.</li>
+<li>The candidate must be the one chosen in the previous step (See
+<a class="reference internal" href="#nuvavaalit.views.voting.select" title="nuvavaalit.views.voting.select"><tt class="xref py py-func docutils literal"><span class="pre">select()</span></tt></a>).</li>
+<li>The CSRF token included in the form must be valid.</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> (<tt class="xref py py-class docutils literal"><span class="pre">pyramid.request.Request</span></tt>) &#8211; The currently active request.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nuvavaalit.views.voting.thanks">
+<tt class="descclassname">nuvavaalit.views.voting.</tt><tt class="descname">thanks</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/views/voting.html#thanks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.views.voting.thanks" title="Permalink to this definition">¶</a></dt>
+<dd><p>The final page after voting.</p>
+<p>At this time the user has already been logged out.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> (<tt class="xref py py-class docutils literal"><span class="pre">pyramid.request.Request</span></tt>) &#8211; The currently active request.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="module-nuvavaalit.views.results"></span><dl class="function">
+<dt id="nuvavaalit.views.results.results">
+<tt class="descclassname">nuvavaalit.views.results.</tt><tt class="descname">results</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/views/results.html#results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.views.results.results" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the results of the election.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nuvavaalit.views">
+<span id="utilities"></span><h2>Utilities<a class="headerlink" href="#module-nuvavaalit.views" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nuvavaalit.views.disable_caching">
+<tt class="descclassname">nuvavaalit.views.</tt><tt class="descname">disable_caching</tt><big>(</big><em>request</em>, <em>response</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/views.html#disable_caching"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.views.disable_caching" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disables caching for the given response by setting the appropriate
+HTTP headers.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nuvavaalit.views.exit_voting">
+<tt class="descclassname">nuvavaalit.views.</tt><tt class="descname">exit_voting</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/views.html#exit_voting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.views.exit_voting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the authentication session by setting the approriate cookies.</p>
+<p>This view does not render anything to the browser.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> (<tt class="xref py py-class docutils literal"><span class="pre">pyramid.request.Request</span></tt>) &#8211; The currently active request.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nuvavaalit.views.login.authenticated_user">
+<tt class="descclassname">nuvavaalit.views.login.</tt><tt class="descname">authenticated_user</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/views/login.html#authenticated_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.views.login.authenticated_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the currently authenticated user or <cite>None</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> (<tt class="xref py py-class docutils literal"><span class="pre">pyramid.request.Request</span></tt>) &#8211; The currently active request.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#nuvavaalit.models.Voter" title="nuvavaalit.models.Voter"><tt class="xref py py-class docutils literal"><span class="pre">nuvavaalit.models.Voter</span></tt></a> or <tt class="docutils literal"><span class="pre">None</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nuvavaalit.views.results.sort_hash">
+<tt class="descclassname">nuvavaalit.views.results.</tt><tt class="descname">sort_hash</tt><big>(</big><em>*items</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/views/results.html#sort_hash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.views.results.sort_hash" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a salted hash calculated over the given items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>items</strong> (<em>iter</em>) &#8211; Iterable of opaque data items to hash.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nuvavaalit.views.results.format_percentage">
+<tt class="descclassname">nuvavaalit.views.results.</tt><tt class="descname">format_percentage</tt><big>(</big><em>count</em>, <em>total</em><big>)</big><a class="reference internal" href="_modules/nuvavaalit/views/results.html#format_percentage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nuvavaalit.views.results.format_percentage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders a percentage value of count / total.</p>
+<p>The percentage will be set to <tt class="docutils literal"><span class="pre">'0.0'</span></tt> if <cite>total</cite> is zero.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>count</strong> (<em>int</em>) &#8211; The number of occurrences.</li>
+<li><strong>total</strong> (<em>int</em>) &#8211; The total size of the possible occurrencies.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API documentation</a><ul>
+<li><a class="reference internal" href="#module-nuvavaalit.models">Database models</a></li>
+<li><a class="reference internal" href="#module-nuvavaalit.events">Event subscribers</a></li>
+<li><a class="reference internal" href="#module-nuvavaalit.crypto">Cryptographic utilities</a></li>
+<li><a class="reference internal" href="#module-nuvavaalit.views.login">Public views</a></li>
+<li><a class="reference internal" href="#module-nuvavaalit.views.voting">Voting views</a></li>
+<li><a class="reference internal" href="#module-nuvavaalit.views">Utilities</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="security.html"
+                        title="previous chapter">Security</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="security.html" title="Security"
+             >previous</a> |</li>
+        <li><a href="index.html">Nuorisovaltuustovaalit 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Suomen Verkkodemokratiaseura ry.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

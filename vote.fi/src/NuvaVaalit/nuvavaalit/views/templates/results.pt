@@ -1,0 +1,61 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="main.macros['master']">
+  <head></head>
+  <body i18n:domain="nuvavaalit">
+    <metal:header fill-slot="header">
+      <div>
+        <h1><a href="${request.application_url}">${site_title}</a></h1>
+      </div>
+    </metal:header>
+
+    <div id="results"
+         metal:fill-slot="main">
+
+        <div class="info" i18n:translate="">
+            Äänestysprosentti <span i18n:name="prosentti">${voting_percentage}</span> %,
+            ääniä annettu yhteensä <span i18n:name="aanimaara">${total_votes}</span>.
+        </div>
+
+        <table id="selected-candidates">
+            <caption i18n:translate="">Valitut ehdokkaat</caption>
+            <thead>
+                <tr>
+                    <th class="value">#</th>
+                    <th i18n:translate="">Ehdokas</th>
+                    <th i18n:translate="" class="value">Äänet</th>
+                    <th i18n:translate="" class="value">Prosentti</th>
+            </thead>
+            <tbody>
+                <tr tal:repeat="candidate selected">
+                    <td class="value">${repeat.candidate.number}.</td>
+                    <td>${candidate.name}, ${candidate.number}</td>
+                    <td class="value">${candidate.votes}</td>
+                    <td class="value">${candidate.percentage} %</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table id="leftover-candidates"
+               tal:condition="show_leftovers">
+            <caption i18n:translate="">Valitsematta jääneet ehdokkaat</caption>
+            <thead>
+                <tr>
+                    <th class="value">#</th>
+                    <th i18n:translate="">Ehdokas</th>
+                    <th i18n:translate="" class="value">Äänet</th>
+                    <th i18n:translate="" class="value">Prosentti</th>
+            </thead>
+            <tbody>
+                <tr tal:repeat="candidate others">
+                    <td class="value">${repeat.candidate.number + threshold}.</td>
+                    <td>${candidate.name}, ${candidate.number}</td>
+                    <td class="value">${candidate.votes}</td>
+                    <td class="value">${candidate.percentage} %</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  </body>
+</html>

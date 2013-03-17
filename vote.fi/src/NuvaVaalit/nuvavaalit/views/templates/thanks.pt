@@ -1,0 +1,26 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="main.macros['master']">
+  <head></head>
+  <body>
+    <metal:header fill-slot="header">
+    <div id="vote-stored" class="progress" i18n:domain="nuvavaalit">
+      <h1 class="visuallyhidden" i18n:translate="">Sulje ikkuna</h1>
+    </div>
+    </metal:header>
+
+    <metal:content fill-slot="main" i18n:domain="nuvavaalit">
+        <h1><a href="${request.application_url}">${site_title}</a></h1>
+
+      <div class="row">
+        <div class="cell width-9 position-0">
+          <div class="info">
+            <h3 i18n:translate="">Kiitos äänestämisestä!</h3>
+            <p i18n:translate="">Äänesi on tallennettu ja sinut on kirjattu ulos äänestysjärjestelmästä.</p>
+          </div>
+        </div>
+      </div>
+    </metal:content>
+  </body>
+</html>

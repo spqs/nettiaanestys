@@ -1,0 +1,44 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="main.macros['master']">
+  <head></head>
+  <body i18n:domain="nuvavaalit">
+    <metal:header fill-slot="header">
+      <div id="unauthorized" class="progress">
+        <h1 class="visuallyhidden">Pääsy estetty</h1>
+      </div>
+    </metal:header>
+
+    <div id="unauthorized"
+         metal:fill-slot="main">
+
+         <div class="row">
+            <div class="cell width-1:2 position-0">
+      <h2>Tämä sivusto vaatii tunnistaumisen</h2>
+
+      <p>Tunnistautumistiedot vanhenevat turvallisuussyistä automaattisesti,
+      mikäli sivustoa ei käytetä 10 minuuttiin. Tämän vuoksi voit nähdä tämän
+      ilmoituksen vaikka olitkin jo tunnistautuneena sivustolle.</p>
+
+      <p>Mikäli et ole vielä äänestänyt, voit <a
+      href="${request.application_url}">tunnistautua sivustolle uudestaan</a>
+      jatkaaksesi äänestämistä normaalisti.</p>
+
+      <p>Voit myös varmistaa, onko äänesi tallennettu järjestelmään
+      tunnistautumalla järjestelmään uudestaan, jolloin näet joko viestin "Olet
+      jo äänestänyt" tai vaihtoehtoisesti voit jatkaa äänestämistä
+      normaalisti.</p>
+  </div>
+  <div class="cell width-1:2 position-1:2">
+    <h2>Denna webbplats kräver att du identifierar dig</h2>
+
+    <p>ID-uppgifterna går ut automatiskt av säkerhetsskäl om webbplatsen inte används på 10 minuter. Därför kan du se detta meddelande även om du redan hade loggat in på webbplatsen.</p>
+    <p>Om du inte ännu har röstat, kan du <a href="${request.application_url}">logga in på webbplatsen på nytt</a> för att fortsätta rösta normalt.</p>
+    <p>Du kan också försäkra dig om att din röst har sparats i systemet genom att logga in på nytt, då du antingen får meddelandet "Du har redan röstat" eller kan fortsätta rösta normalt.</p>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>

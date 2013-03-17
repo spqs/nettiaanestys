@@ -1,0 +1,39 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="main.macros['master']">
+  <head></head>
+  <body>
+    <metal:header fill-slot="header">
+      <div id="identify-yourself" class="progress" i18n:domain="nuvavaalit">
+        <h1 class="visuallyhidden" i18n:translate="">Tunnistaudu</h1>
+      </div>
+    </metal:header>
+
+    <div metal:fill-slot="main" i18n:domain="nuvavaalit">
+
+        <h1><a href="${request.application_url}">${site_title}</a></h1>
+
+        <div class="auth-failure error"
+             tal:condition="error">${error}</div>
+
+      <form id="login-form" action="${action_url}" method="post" autocomplete="off">
+        <p>
+          <label><span i18n:translate="">Käyttäjätunnus</span><br />
+          <input type="text" name="username" autofocus="autofocus" />
+          </label>
+
+          <label><span i18n:translate="">Salasana</span><br />
+          <input type="password" name="password" value="" />
+          </label>
+        </p>
+        <p>
+          <input type="hidden" name="csrf_token" value="${csrf_token}" />
+          <input type="hidden" name="form.submitted" />
+          <input type="submit" name="login" value="Tunnistaudu" i18n:attributes="value"/>
+        </p>
+      </form>
+
+    </div>
+  </body>
+</html>

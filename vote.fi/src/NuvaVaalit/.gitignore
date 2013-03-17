@@ -1,0 +1,5 @@
+NuvaVaalit.db
+.coverage
+cover
+coverage.xml
+nosetests.xml

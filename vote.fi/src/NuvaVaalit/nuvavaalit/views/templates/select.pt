@@ -1,0 +1,43 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      metal:use-macro="main.macros['master']">
+  <head></head>
+  <body i18n:domain="nuvavaalit">
+    <metal:header fill-slot="header">
+      <div id="select-candidate" class="progress">
+        <h1 class="visuallyhidden" i18n:translate="">Valitse</h1>
+      </div>
+    </metal:header>
+
+    <div metal:fill-slot="main" i18n:domain="nuvavaalit">
+
+    <h1><a href="${request.application_url}">${site_title}</a></h1>
+
+    <div id="selection-info">
+    <div class="row">
+      <div class="cell width-6 position-0">
+        <p id="select-info" i18n:translate="">Valitse ehdokkaasi klikkaamalla nimeä.</p>
+        <p id="select-empty-info" i18n:translate="">
+            Halutessasi voit äänestää myös
+            <a href="${empty_vote_url}" i18n:name="tyhjaa" title="Äänestä tyhjää"
+               i18n:translate="" i18n:attributes="title"
+               data-candidate-number="${empty_vote_number}">tyhjää</a>.</p>
+      </div>
+      <div id="search-wrapper" class="cell width-3 position-6"></div>
+    </div>
+    </div>
+
+    <div class="row" tal:repeat="row candidates">
+      <div class="cell width-1:${columns} position-${positions.next()}"
+           tal:repeat="candidate row">
+        <div class="candidate"
+             tal:condition="candidate">
+            <a href="${candidate.vote_url}"><img src="${candidate.image_url}" width="100" height="100" /></a>
+            <h3><a href="${candidate.vote_url}" data-candidate-number="${candidate.number}">${candidate.name}, ${candidate.number}</a></h3>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </body>
+</html>

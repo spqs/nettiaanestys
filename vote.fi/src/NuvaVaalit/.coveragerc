@@ -1,0 +1,6 @@
+[run]
+branch = True
+include = nuvavaalit/*
+
+[html]
+directory = cover

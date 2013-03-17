@@ -1,0 +1,66 @@
+<metal:document define-macro="master"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+  ><tal:doctype content="structure string:&lt;!DOCTYPE html&gt;"/>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8"/>
+
+  <title>Vote.fi | ${site_title}</title>
+  <meta name="description"
+        tal:condition="description|None"
+        tal:attributes="content description" />
+
+  <meta name="viewport" content="width=800"/>
+
+  <link rel="shortcut icon" href="${request.static_url('nuvavaalit:views/templates/static/images/favicon.ico')}"/>
+
+  <link rel="stylesheet" href="${request.static_url('nuvavaalit:views/templates/static/css/style.css')}"/>
+  <link rel="stylesheet" href="${request.static_url('nuvavaalit:views/templates/static/css/decogrids-9.css')}"/>
+  <link rel="stylesheet" href="${request.static_url('nuvavaalit:views/templates/static/css/flick/jquery-ui-1.8.9.custom.css')}"/>
+
+  <metal:head define-slot="head_slot"/>
+
+  <script type="text/javascript" src="${request.static_url('nuvavaalit:views/templates/static/js/libs/modernizr-1.6.min.js')}"></script>
+
+</head>
+
+<body i18n:domain="nuvavaalit" class="lang-${request._LOCALE_}">
+
+  <div id="container" class="${page_mode} ${page_name|''}">
+    <header>
+        <div id="languages">
+            <a href="${request.route_url('set_language', lang='fi')}">Suomeksi</a>
+            |
+            <a href="${request.route_url('set_language', lang='sv')}">På svenska</a>
+        </div>
+        <metal:header define-slot="header"/>
+    </header>
+
+    <metal:content define-slot="main"/>
+
+    <div class="row">
+        <div class="cell width-9 position-0">
+            <footer>
+                © 2011-2012 Suomen Verkkodemokratiaseura
+            </footer>
+        </div>
+    </div>
+
+  </div>
+
+  <script type="text/javascript" src="${request.static_url('nuvavaalit:views/templates/static/js/libs/jquery-1.4.4.min.js')}"></script>
+  <script type="text/javascript" src="${request.static_url('nuvavaalit:views/templates/static/js/libs/jquery-ui-1.8.9.custom.min.js')}"></script>
+  <script type="text/javascript" src="${request.static_url('nuvavaalit:views/templates/static/js/libs/jquery.tools.min.js')}"></script>
+  <script type="text/javascript" src="${request.static_url('nuvavaalit:views/templates/static/js/libs/jquery.scrollTo.min.js')}"></script>
+  <script type="text/javascript" src="${request.route_url('custom_js')}"></script>
+
+  <metal:javascript define-slot="javascript_bottom"/>
+
+</body>
+</html>
+</metal:document>
